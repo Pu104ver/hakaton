@@ -1,0 +1,30 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAFI</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'event_list' %}">Events</a></li>
+                <li><a href="{% url 'interactive_element_list' %}">Interactive Elements</a></li>
+                <li><a href="{% url 'reports:create_report' %}">Create Report</a></li> 
+                <li><a href="{% url 'account_logout' %}">Logout</a></li>
+            {% else %}
+                <li><a href="{% url 'account_login' %}">Login</a></li>
+                <li><a href="{% url 'register' %}">Signup</a></li>
+            {% endif %}
+        </ul>
+    </nav>    
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

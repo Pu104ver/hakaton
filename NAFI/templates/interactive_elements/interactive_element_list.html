@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Interactive Elements</h1>
+<ul>
+    {% for element in elements %}
+        <li>{{ element.title }} ({{ element.get_element_type_display }})</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'interactive_element_create' %}">Create new element</a>
+{% endblock %}
