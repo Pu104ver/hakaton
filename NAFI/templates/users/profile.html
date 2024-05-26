@@ -1,17 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Профиль пользователя</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block content %}
     <h1>Профиль пользователя</h1>
     <p>Имя пользователя: {{ request.user.username }}</p>
     <p>Email: {{ request.user.email }}</p>
     <p>Организатор: {{ request.user.is_organizer }}</p>
     <p>Участник: {{ request.user.is_participant }}</p>
     <p><a href="http://127.0.0.1:8000/">На главную</a></p>
-</body>
-</html>
-
+{% endblock %}

@@ -1,8 +1,5 @@
 {% extends 'base.html' %}
 
-{% block title %}
-    NAFI
-{% endblock %}
 {% block content %}
     {% if user.is_authenticated %}
     <h1>Добро пожаловать на интерактивную платформу, {{ request.user.username }}!</h1>

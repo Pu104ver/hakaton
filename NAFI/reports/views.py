@@ -11,4 +11,4 @@ def create_report(request):
             return redirect('home')
     else:
         form = ReportForm()
-    return render(request, 'create_report.html', {'form': form})
+    return render(request, 'reports/create_report.html', {'form': form})
