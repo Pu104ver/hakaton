@@ -9,4 +9,5 @@ urlpatterns = [
     path('events/', include('events.urls')),
     path('interactive-elements/', include('interactive_elements.urls')),
     path('reports/', include('reports.urls')),
+    path('meetings/', include('meetings.urls')),
 ]

@@ -1,11 +1,10 @@
 from django.db import models
 from django.conf import settings
 
-class Event(models.Model):
+class Document(models.Model):
     title = models.CharField(max_length=255)
-    description = models.TextField(blank=True, null=True)
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField(blank=True, null=True)
+    file = models.FileField(upload_to='documents/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):

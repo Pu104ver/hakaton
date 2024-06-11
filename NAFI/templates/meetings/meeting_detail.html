@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{{ meeting.title }}</h2>
+<p>{{ meeting.description }}</p>
+<p><a href="{{ meeting.url }}">Ссылка на встречу</a></p>
+<p>Начало: {{ meeting.start_time }}</p>
+<p>Окончание: {{ meeting.end_time }}</p>
+<iframe src="{{ meeting.url }}" width="100%" height="600px" allow="camera; microphone; fullscreen"></iframe>
+<a href="{% url 'create_meeting' %}">Back to meetings</a>
+    
+{% endblock %}

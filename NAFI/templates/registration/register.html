@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load socialaccount %}
+{% get_providers as socialaccount_providers %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Регистрация</h2>
+    <form method="post" action="{% url 'register' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Регистрация</button>
+    </form>
+
+    <hr>
+
+    <h3>Зарегистрироваться с помощью</h3> 
+    {% comment %} TODO: почему-то не отобржаются провайдеры {% endcomment %}
+    <div>
+        {% for provider in socialaccount_providers %}
+        <a class="btn btn-outline-secondary" href="{% provider_login_url provider.id %}">
+            Зарегистрироваться с помощью {{ provider.name }}
+        </a>
+    {% endfor %}
+    </div>
+
+    <hr>
+
+    <p>Уже есть аккаунт? <a href="{% url 'login' %}">Вход</a></p>
+</div>
+{% endblock %}

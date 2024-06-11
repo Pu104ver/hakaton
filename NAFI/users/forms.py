@@ -1,17 +1,15 @@
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import CustomUser
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from .models import CustomUser
 
+class UserRegistrationForm(UserCreationForm):
+    email = forms.EmailField()
+    field_of_activity = forms.ChoiceField(choices=[
+        ('IT', 'Информационные технологии'),
+        ('Маркетинг', 'Маркетинг'),
+        ('Производство', 'Производство'),
+    ], label='Сфера деятельности')
 
-class CustomUserCreationForm(UserCreationForm):
-    email = forms.EmailField(label="Email")
-    first_name = forms.CharField(label="Имя")
-    last_name = forms.CharField(label="Фамилия")
-    class Meta(UserCreationForm.Meta):
-        model = CustomUser
-        fields = ('username', 'first_name', 'last_name', 'email', 'is_organizer', 'is_participant')
-
-class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'is_organizer', 'is_participant')
+        fields = ['username', 'email', 'password1', 'password2', 'field_of_activity']
