@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% load course_extras %}
+
+{% block content %}
+<h2>Мои курсы</h2>
+<div class="user-courses">
+    {% for user_course in user_courses %}
+        <div class="course-item">
+            <h3><a href="{% url 'course_detail' user_course.course.id %}">{{ user_course.course.title }}</a></h3>
+            <p>Записан: {{ user_course.enrolled_at }}</p>
+            <p>Завершен: {{ user_course.completed_at|default:"Ещё не завершен" }}</p>
+            <h4>Прогресс</h4>
+            <ul>
+                {% for module in user_course.course.modules.all %}
+                    <li>{{ module.title }}
+                        <ul>
+                            {% for lesson in module.lessons.all %}
+                                <li>
+                                    <a href="{% url 'lesson_detail' lesson.id %}">{{ lesson.title }}</a>
+                                    {% if lesson|check_lesson_progress:request.user %}
+                                        <span>(Завершено)</span>
+                                    {% else %}
+                                        <span>(Не завершено)</span>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

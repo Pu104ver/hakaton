@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load course_extras %}
+
+{% block content %}
+<h2>{{ course.title }}</h2>
+<p>{{ course.description }}</p>
+
+{% if user.is_authenticated %}
+    {% if user_course %}
+        <p>Вы уже записаны на этот курс.</p>
+    {% else %}
+        <a href="{% url 'enroll_course' course.id %}" class="btn btn-primary">Записаться на курс</a>
+    {% endif %}
+{% else %}
+    <p>Войдите, чтобы записаться на курс.</p>
+{% endif %}
+
+<h3>Модули</h3>
+<div class="module-list">
+    {% for module in course.modules.all %}
+        <div class="module-item">
+            <h4>{{ module.title }}</h4>
+            <p>{{ module.description }}</p>
+            <ul>
+                {% for lesson in module.lessons.all %}
+                    <li>
+                        <a href="{% url 'lesson_detail' lesson.id %}">{{ lesson.title }}</a>
+                        {% if lesson|check_lesson_progress:user %}
+                            <span>(Завершено)</span>
+                        {% else %}
+                            <span>(Не завершено)</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -15,14 +15,9 @@
     <hr>
 
     <h3>Войти с помощью</h3>
-    {% comment %} TODO: почему-то не отобржаются провайдеры {% endcomment %}
     <div>
-        {% providers_media_js %}
-        {% for provider in socialaccount_providers %}
-            <a class="btn btn-outline-secondary" href="{% provider_login_url provider.id %}">
-                Войти с помощью {{ provider.name }}
-            </a>
-        {% endfor %}
+        <a href="{% provider_login_url 'yandex' %}">Войти через Яндекс</a>
+        <a href="{% provider_login_url 'github' %}">Войти через GitGHub</a>
     </div>
 
     <hr>

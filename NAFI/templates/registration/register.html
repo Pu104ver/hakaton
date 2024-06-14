@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load socialaccount %}
-{% get_providers as socialaccount_providers %}
 
 {% block title %}Регистрация{% endblock %}
 
@@ -16,13 +15,9 @@
     <hr>
 
     <h3>Зарегистрироваться с помощью</h3> 
-    {% comment %} TODO: почему-то не отобржаются провайдеры {% endcomment %}
     <div>
-        {% for provider in socialaccount_providers %}
-        <a class="btn btn-outline-secondary" href="{% provider_login_url provider.id %}">
-            Зарегистрироваться с помощью {{ provider.name }}
-        </a>
-    {% endfor %}
+        <a href="{% provider_login_url 'yandex' %}">Яндекс</a>
+        <a href="{% provider_login_url 'github' %}">GitGHub</a>
     </div>
 
     <hr>

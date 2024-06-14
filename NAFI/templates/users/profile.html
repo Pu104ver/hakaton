@@ -1,12 +1,22 @@
 {% extends 'base.html' %}
 
-{% block title %}Profile{% endblock %}
-
 {% block content %}
-    <h1>Профиль пользователя</h1>
-    <p>Имя пользователя: {{ request.user.username }}</p>
-    <p>Email: {{ request.user.email }}</p>
-    <p>Организатор: {{ request.user.is_organizer }}</p>
-    <p>Участник: {{ request.user.is_participant }}</p>
-    <p><a href="http://127.0.0.1:8000/">На главную</a></p>
+<div class="greeting">
+    <h2>{{ greeting | safe }}</h2>
+</div>
+
+<h3>Ваши курсы</h3>
+{% if courses_progress %}
+    <ul>
+        {% for course_progress in courses_progress %}
+            <li>
+                <h4><a href="{% url 'course_detail' course_progress.course.id %}">{{ course_progress.course.title }}</a></h4>
+                <p>Прогресс: {{ course_progress.progress_percent }}%</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Вы не записаны ни на один курс.</p>
+{% endif %}
+<p><a href="http://127.0.0.1:8000/">На главную</a></p>
 {% endblock %}

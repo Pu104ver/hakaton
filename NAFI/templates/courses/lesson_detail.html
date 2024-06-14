@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{{ lesson.title }}</h2>
+<div class="lesson-content">
+    {{ lesson.content|safe }}
+</div>
+
+{% if user.is_authenticated %}
+    <div class="lesson-progress">
+        {% if user_progress and user_progress.completed %}
+            <p>Урок завершен.</p>
+            <a href="{% url 'unmark_lesson_completed' lesson.id %}" class="btn btn-warning">Отметить как незавершенный</a>
+        {% else %}
+            <a href="{% url 'mark_lesson_completed' lesson.id %}" class="btn btn-success">Отметить как завершенный</a>
+        {% endif %}
+    </div>
+{% else %}
+    <p>Войдите, чтобы отметить урок как завершенный.</p>
+{% endif %}
+{% endblock %}
