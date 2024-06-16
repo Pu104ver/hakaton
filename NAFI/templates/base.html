@@ -11,6 +11,7 @@
     <!-- Your custom CSS -->
     {% comment %} TODO: эта херня не видит файла {% endcomment %}
     <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+    {% block extrahead %}{% endblock %}
 
     <style>
         body {
@@ -110,10 +111,10 @@
                 <a href="{% url 'profile' %}">Личный кабинет</a>
             </li>
             <li>
-                <a href="{% url 'create_meeting' %}">Конференции</a>
+                <a href="{% url 'user_meetings' %}">Конференции</a>
             </li>
             <li>
-                <a href="#">Календарь</a>
+                <a href="{% url 'calendar' %}">Календарь</a>
             </li>
             <li>
                 <a href="#">Обучение</a>
@@ -170,7 +171,7 @@
                             <a class="nav-link" href="#">Письма</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Уведомления</a>
+                            <a class="nav-link" href="{% url 'user_notifications' %}">Уведомления</a>
                         </li>
                         {% if user.is_authenticated %}
                             <li class="nav-item">
@@ -197,12 +198,17 @@
         </div>
 
         <!-- Content -->
-        <div class="container">
+        <main>
             {% block content %}
+            <!-- Page content -->
             {% endblock %}
-        </div>
+        </main>
     </div>
 
+    <footer>
+        <!-- Footer content -->
+    </footer>
+    
     <!-- jQuery, Popper.js, Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
@@ -213,5 +219,9 @@
             document.getElementById('main-content').classList.toggle('main-content-collapsed');
         });
     </script>
+
+    {% block extra_js %}
+    <!-- Add any extra JavaScript here -->
+    {% endblock %}
 </body>
 </html>
