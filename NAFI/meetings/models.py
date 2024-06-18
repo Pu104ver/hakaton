@@ -3,7 +3,9 @@ from django.conf import settings
 from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from notifications.models import Notification
+
 
 User = get_user_model()
 
@@ -17,6 +19,12 @@ class Meeting(models.Model):
     end_time = models.DateTimeField(blank=True, null=True)
     participants = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='meetings_participants')
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        participant_group, created = Group.objects.get_or_create(name='Participant')
+        for participant in self.participants.all():
+            participant.groups.add(participant_group)
+            
     def __str__(self):
         return self.title
 

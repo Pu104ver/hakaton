@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>{{ interactive.title }} - Results</h2>
+    <ul>
+        {% for response in responses %}
+            <li>{{ response.participant.username }}: {{ response.response }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

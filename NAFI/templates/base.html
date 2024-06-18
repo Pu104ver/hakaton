@@ -11,8 +11,6 @@
     <!-- Your custom CSS -->
     {% comment %} TODO: эта херня не видит файла {% endcomment %}
     <link href="{% static 'css/styles.css' %}" rel="stylesheet">
-    {% block extrahead %}{% endblock %}
-
     <style>
         body {
             display: flex;
@@ -98,6 +96,8 @@
             vertical-align: middle;
         }
     </style>
+    {% block extrahead %}{% endblock %}
+
 </head>
 <body>
     <!-- Left Sidebar -->

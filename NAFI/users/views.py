@@ -2,9 +2,10 @@ from datetime import datetime
 from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from meetings.models import Meeting
 from .forms import UserRegistrationForm
 from courses.models import Module, UserProgress, UserCourse
-
+from datetime import datetime, date
 
 @csrf_protect
 def register(request):
@@ -69,9 +70,24 @@ def profile(request):
             'progress_percent': progress_percent
         })
     
+    meetings_host = Meeting.objects.filter(host=user)
+    meetings_participant = Meeting.objects.filter(participants=user)
+    
+    today = date.today()
+    today_meetings = Meeting.objects.filter(
+        start_time__date=today, 
+        participants=user
+    ).order_by('start_time')
+    
+    print(today_meetings)
     context = {
         'greeting': greeting,
         'courses_progress': courses_progress,
-        'user': user
+        'user': user,
+        'meetings_host': meetings_host,
+        'meetings_participant': meetings_participant,
+        'today_meetings': today_meetings,
+        'today': today.strftime("%B %d, %Y"),
+        'today_weekday': today.strftime("%A")
     }
     return render(request, 'users/profile.html', context)

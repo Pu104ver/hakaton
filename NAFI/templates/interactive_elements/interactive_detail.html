@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>{{ interactive.title }}</h2>
+    <p>{{ interactive.description }}</p>
+    <div>
+        <h3>Add Questions/Activities</h3>
+        <ul>
+            <li><a href="{% url 'add_text_question' interactive.id %}">Add Text Question</a></li>
+            <li><a href="{% url 'add_number_question' interactive.id %}">Add Number Question</a></li>
+            <li><a href="{% url 'add_audience_qa' interactive.id %}">Add Audience Q&A</a></li>
+            <li><a href="{% url 'add_networking' interactive.id %}">Add Networking</a></li>
+            <li><a href="{% url 'add_star_voting' interactive.id %}">Add Star Voting</a></li>
+            <li><a href="{% url 'add_single_choice' interactive.id %}">Add Single Choice Question</a></li>
+            <li><a href="{% url 'add_multiple_choice' interactive.id %}">Add Multiple Choice Question</a></li>
+            <li><a href="{% url 'add_survey' interactive.id %}">Add Survey</a></li>
+            <li><a href="{% url 'add_quiz' interactive.id %}">Add Quiz</a></li>
+        </ul>
+    </div>
+    <div>
+        <h3>Questions/Activities</h3>
+        {% for question in interactive.textquestion_set.all %}
+            <p>Text Question: {{ question.question_text }}</p>
+        {% endfor %}
+        {% for question in interactive.numberquestion_set.all %}
+            <p>Number Question: {{ question.question_text }}</p>
+        {% endfor %}
+        {% for question in interactive.audienceqa_set.all %}
+            <p>Audience Q&A: {{ question.question_text }}</p>
+        {% endfor %}
+        {% for question in interactive.networking_set.all %}
+            <p>Networking: {{ question.question_text }}</p>
+        {% endfor %}
+        {% for question in interactive.starvoting_set.all %}
+            <p>Star Voting: {{ question.question_text }}</p>
+        {% endfor %}
+        {% for question in interactive.singlechoice_set.all %}
+            <p>Single Choice Question: {{ question.question_text }}</p>
+        {% endfor %}
+        {% for question in interactive.multiplechoice_set.all %}
+            <p>Multiple Choice Question: {{ question.question_text }}</p>
+        {% endfor %}
+        {% for question in interactive.survey_set.all %}
+            <p>Survey: {{ question.question_text }}</p>
+        {% endfor %}
+        {% for question in interactive.quiz_set.all %}
+            <p>Quiz: {{ question.question_text }}</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
