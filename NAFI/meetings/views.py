@@ -43,12 +43,6 @@ def create_meeting(request):
             meeting.save()
             form.save_m2m()
 
-            for participant in meeting.participants.all():
-                Notification.objects.create(
-                    user=participant,
-                    message=f'You have been invited to a meeting: {meeting.title} on {meeting.start_time}'
-                )
-
             return redirect('meeting_detail', meeting_id=meeting.id)
     else:
         form = MeetingForm()
@@ -90,5 +84,4 @@ def user_meetings(request):
 def calendar_view(request):
     meetings_host = Meeting.objects.filter(models.Q(host=request.user))
     meetings_participant = Meeting.objects.filter(models.Q(participants=request.user))
-    print(meetings_host, meetings_participant)
     return render(request, 'meetings/calendar.html', {'meetings_host': meetings_host, 'meetings_participant': meetings_participant})

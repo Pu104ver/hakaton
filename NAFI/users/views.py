@@ -79,7 +79,6 @@ def profile(request):
         participants=user
     ).order_by('start_time')
     
-    print(today_meetings)
     context = {
         'greeting': greeting,
         'courses_progress': courses_progress,

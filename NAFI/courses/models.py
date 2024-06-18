@@ -10,6 +10,11 @@ class Course(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def all_lessons_completed(self, user):
+        total_lessons = Lesson.objects.filter(module__course=self).count()
+        completed_lessons = UserProgress.objects.filter(lesson__module__course=self, user=user, completed=True).count()
+        return total_lessons == completed_lessons
+    
     def __str__(self):
         return self.title
 

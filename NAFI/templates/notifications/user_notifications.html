@@ -9,9 +9,16 @@
             <li>
                 {{ notification.message }} - {{ notification.created_at|date:"d M Y H:i" }}
                 {% if not notification.read %}
-                    <strong>(Непрочитано)</strong>
+                    <strong>✓</strong>
                     <a href="{% url 'mark_notification_as_read' notification_id=notification.id %}">Отметить как прочитанное</a>
+                {% else %}
+                <strong>✓✓</strong>
                 {% endif %}
+                
+                {% if notification.link %}
+                    <p><a href="{{ notification.link }}">Прикрепленная ссылка</a></p>
+                {% endif %}
+                    
             </li>
         {% endfor %}
     </ul>

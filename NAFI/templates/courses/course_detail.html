@@ -2,6 +2,8 @@
 {% load course_extras %}
 
 {% block content %}
+<a href="{% url 'user_courses' %}" class="btn btn-primary">Назад к курсам</a>
+
 <h2>{{ course.title }}</h2>
 <p>{{ course.description }}</p>
 

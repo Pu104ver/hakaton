@@ -10,7 +10,10 @@ class DateTimeInput(forms.DateTimeInput):
     input_type = 'datetime-local'
 
 class MeetingForm(forms.ModelForm):
-    participants = forms.ModelMultipleChoiceField(queryset=User.objects.none(), widget=forms.CheckboxSelectMultiple)
+    participants = forms.ModelMultipleChoiceField(
+        queryset=User.objects.all(),
+        widget=forms.CheckboxSelectMultiple
+    )
     start_time = forms.DateTimeField(widget=DateTimeInput(attrs={'min': timezone.now().isoformat()}))
     end_time = forms.DateTimeField(widget=DateTimeInput(attrs={'min': timezone.now().isoformat()}))
 

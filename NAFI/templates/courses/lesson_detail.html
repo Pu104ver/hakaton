@@ -18,4 +18,14 @@
 {% else %}
     <p>Войдите, чтобы отметить урок как завершенный.</p>
 {% endif %}
+
+<div class="lesson-navigation">
+    {% if previous_lesson %}
+        <a href="{% url 'lesson_detail' previous_lesson.id %}" class="btn btn-secondary">Предыдущий урок</a>
+    {% endif %}
+    <a href="{% url 'course_detail' lesson.module.course.id %}" class="btn btn-primary">Назад к курсу</a>
+    {% if next_lesson %}
+        <a href="{% url 'lesson_detail' next_lesson.id %}" class="btn btn-secondary">Следующий урок</a>
+    {% endif %}
+</div>
 {% endblock %}

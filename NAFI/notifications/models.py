@@ -4,6 +4,7 @@ from django.conf import settings
 class Notification(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     message = models.TextField()
+    link = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     read = models.BooleanField(default=False)
 
