@@ -224,15 +224,32 @@ SITE_ID = 1
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
+ACCOUNT_FORMS = {
+    'signup': 'users.forms.CustomSignupForm',
+    'login': 'users.forms.CustomLoginForm',
+}
+
 LOGIN_URL = 'users:login'
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = "kinopoisk.y4ndex3@yandex.ru"
+EMAIL_HOST_PASSWORD = "hlavcjkvegbuqhge"
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+EMAIL_SUBJECT_PREFIX = 'Ilimetr. '
+DEFAULT_FROM_EMAIL = "kinopoisk.y4ndex3@yandex.ru"
+
+SERVER_EMAIL = "kinopoisk.y4ndex3@yandex.ru"
 
 TINYMCE_JS_URL = os.path.join(STATIC_URL, "https://cdn.tiny.cloud/1/no-origin/tinymce/7.1.2-65/tinymce.min.js")
 

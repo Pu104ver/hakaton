@@ -6,21 +6,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Илиметр{% endblock %}</title>
-    <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Your custom CSS -->
-    {% comment %} TODO: "эмодзи" не хочет меняться в style.css {% endcomment %}
-    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
-    <style>
-        .emoji {
-            width: 50px;
-            height: auto;
-            margin-left: 10px;
-            vertical-align: middle;
-          }
-    </style>
+    <link href="{% static 'css/authenticated_styles.css' %}" rel="stylesheet">
     {% block extrahead %}{% endblock %}
-
 </head>
 <body>
     <!-- Left Sidebar -->
@@ -55,7 +44,7 @@
                 <li>
                     <form method="post" action="{% url 'users:logout' %}">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-link" style="padding: 0; border: none; background: none;">Выход</button>
+                        <button type="submit" class="btn btn-link" style="padding: 0; border: none; background: none; color: white;">Выход</button>
                     </form>
                 </li>
             {% else %}
@@ -140,6 +129,7 @@
         document.getElementById('sidebarCollapse').addEventListener('click', function() {
             document.getElementById('sidebar').classList.toggle('sidebar-collapsed');
             document.getElementById('main-content').classList.toggle('main-content-collapsed');
+            document.querySelector('.navbar').classList.toggle('main-content-collapsed'); /* добавим класс для навбара */
         });
     </script>
 

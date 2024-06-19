@@ -1,22 +1,24 @@
 from datetime import datetime
-from django.views.decorators.csrf import csrf_protect
-from django.shortcuts import render, redirect
+from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView, LogoutView
+from allauth.account.views import SignupView
 from meetings.models import Meeting
-from .forms import UserRegistrationForm
+from .forms import CustomSignupForm, CustomLoginForm
 from courses.models import Module, UserProgress, UserCourse
 from datetime import datetime, date
 
-@csrf_protect
-def register(request):
-    if request.method == 'POST':
-        form = UserRegistrationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('login')
-    else:
-        form = UserRegistrationForm()
-    return render(request, 'registration/register.html', {'form': form})
+class CustomSignupView(SignupView):
+    form_class = CustomSignupForm
+    template_name = 'account/register.html'
+
+class CustomLoginView(LoginView):
+    form_class = CustomLoginForm
+    template_name = 'account/login.html'
+
+class CustomLogoutView(LogoutView):
+    next_page = reverse_lazy('home')
 
 def get_greeting(request):
     current_time = datetime.now()

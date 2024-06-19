@@ -29,14 +29,14 @@ class Meeting(models.Model):
         return self.title
 
 @receiver(m2m_changed, sender=Meeting.participants.through)
-def participants_changed(sender, meeting, action, pk_set, **kwargs):
+def participants_changed(sender, instance, action, pk_set, **kwargs):
     if action == "post_add":
         for user_id in pk_set:
             user = User.objects.get(pk=user_id)
             Notification.objects.create(
                 user=user,
-                message=f'You have been added to the meeting "{meeting.title}" by {meeting.host.username}.',
-                link=meeting.url
+                message=f'You have been added to the meeting "{instance.title}" by {instance.host.username}.',
+                link=instance.url
             )
             
     elif action == "post_remove":
@@ -44,5 +44,5 @@ def participants_changed(sender, meeting, action, pk_set, **kwargs):
             user = User.objects.get(pk=user_id)
             Notification.objects.create(
                 user=user,
-                message=f'You have been removed from the meeting "{meeting.title}" by {meeting.host.username}.'
+                message=f'You have been removed from the meeting "{instance.title}" by {instance.host.username}.'
             )
