@@ -6,7 +6,7 @@
 {% block content %}
 <div class="container mt-5">
     <h2>Регистрация</h2>
-    <form method="post" action="{% url 'register' %}">
+    <form method="post" action="{% url 'users:register' %}">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-primary">Регистрация</button>
@@ -22,6 +22,6 @@
 
     <hr>
 
-    <p>Уже есть аккаунт? <a href="{% url 'login' %}">Вход</a></p>
+    <p>Уже есть аккаунт? <a href="{% url 'users:login' %}">Вход</a></p>
 </div>
 {% endblock %}

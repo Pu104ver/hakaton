@@ -76,9 +76,44 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 
-SOCIAL_ACCOUNT_PROVIDERS = {
-    
+SOCIALACCOUNT_PROVIDERS = {
+    'yandex': {
+        'SCOPE': [
+            'login:email',
+            'login:info',
+            'login:avatar',
+        ],
+        'AUTH_PARAMS': {'access_type': 'online'},
+        'METHOD': 'oauth2',
+        'OAUTH_PKCE_ENABLED': True,
+    },
+    'github': {
+        'SCOPE': [
+            'user',
+            'repo',
+            'read:org',
+        ],
+        'AUTH_PARAMS': {'allow_signup': 'true'},
+        'OAUTH_PKCE_ENABLED': True,
+    },
 }
+
+OAUTH_PROVIDERS = [
+    {
+        'provider': 'yandex',
+        'name': 'Yandex',
+        'client_id': 'c4885d8267a049929068e28f02ddd48d',
+        'secret': '36a4c9c8c1e546748c347e1aa634b2e2',
+        'key': ''
+    },
+    {
+        'provider': 'github',
+        'name': 'GitHub',
+        'client_id': 'Iv23liw6mKXJDqe6JV0e',
+        'secret': '0ebda726ca58385085da158b7d267453808d5298',
+        'key': ''
+    }
+]
 
 
 ROOT_URLCONF = 'config.urls'
@@ -189,6 +224,7 @@ SITE_ID = 1
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
+LOGIN_URL = 'users:login'
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 

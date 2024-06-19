@@ -7,4 +7,6 @@ from django.dispatch import receiver
 def add_user_to_default_group(sender, instance, created, **kwargs):
     if created:
         user_group, created = Group.objects.get_or_create(name='User')
+        participant_group, created = Group.objects.get_or_create(name='Participant')
         instance.groups.add(user_group)
+        instance.groups.add(participant_group)
