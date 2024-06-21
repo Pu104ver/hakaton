@@ -108,4 +108,34 @@ footer {
     margin-left: 10px;
     vertical-align: middle;
 }
-  
+
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+.main-content-profile {
+    display: flex;
+    width: 100%;
+}
+
+.courses-section {
+    flex: 3;
+    padding-right: 20px;
+}
+
+.sidebar-profile {
+    flex: 1;
+    background-color: #f8f8f8;
+    padding: 20px;
+    border-left: 1px solid #ddd;
+}
+
+#calendar {
+    max-width: 100%;
+    margin: 0 auto 20px auto;
+}
+

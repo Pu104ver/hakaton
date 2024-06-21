@@ -8,7 +8,7 @@ from .forms import (
     InteractiveForm, TextQuestionForm, NumberQuestionForm, AudienceQAForm, NetworkingForm,
     StarVotingForm, SingleChoiceForm, MultipleChoiceForm, SurveyForm, QuizForm, InteractiveResponseForm
 )
-from .decorators.user_passes_test_custom import user_passes_test_custom
+from config.decorators.user_passes_test_custom import user_passes_test_custom
 from meetings.models import Meeting
 
 def is_organizer(user):

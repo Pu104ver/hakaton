@@ -1,6 +1,6 @@
 from django import forms
 from allauth.account.forms import SignupForm, LoginForm
-from .models import CustomUser
+from .models import CustomUser, UserProfile
 
 class CustomSignupForm(SignupForm):
     field_of_activity = forms.ChoiceField(choices=[
@@ -22,3 +22,10 @@ class CustomLoginForm(LoginForm):
         
     def get_user(self):
         return self.user
+    
+class UserProfileForm(forms.ModelForm):
+    birth_date = forms.DateField(widget=forms.TextInput(attrs={'id': 'id_birth_date'}), required=False)
+
+    class Meta:
+        model = UserProfile
+        fields = ['bio', 'profile_picture', 'gender', 'birth_date']

@@ -3,6 +3,9 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from meetings.models import Meeting
 from interactive_elements.models import TextQuestion, NumberQuestion, AudienceQA, Networking, StarVoting, SingleChoice, MultipleChoice, Survey, Quiz
+from departments.models import Department
+from courses.models import UserCourse
+
 
 class Command(BaseCommand):
     help = 'Create initial groups and permissions'
@@ -15,6 +18,7 @@ class Command(BaseCommand):
         guest_group, created = Group.objects.get_or_create(name='Guest')
         moderator_group, created = Group.objects.get_or_create(name='Moderator')
         analyst_group, created = Group.objects.get_or_create(name='Analyst')
+        leader_group, created = Group.objects.get_or_create(name='Leader')
 
         meeting_ct = ContentType.objects.get_for_model(Meeting)
         interactive_cts = [
@@ -28,6 +32,9 @@ class Command(BaseCommand):
             ContentType.objects.get_for_model(Survey),
             ContentType.objects.get_for_model(Quiz),
         ]
+
+        department_ct = ContentType.objects.get_for_model(Department)
+        user_course_ct = ContentType.objects.get_for_model(UserCourse)
 
         perms = {
             'can_create_meeting': Permission.objects.get_or_create(codename='can_create_meeting',
@@ -48,6 +55,12 @@ class Command(BaseCommand):
             'can_view_analytics': Permission.objects.get_or_create(codename='can_view_analytics',
                                                                    name='Can view analytics',
                                                                    content_type=meeting_ct)[0],
+            'can_manage_department': Permission.objects.get_or_create(codename='can_manage_department',
+                                                                       name='Can manage department',
+                                                                       content_type=department_ct)[0],
+            'can_view_department_courses': Permission.objects.get_or_create(codename='can_view_department_courses',
+                                                                            name='Can view department courses',
+                                                                            content_type=user_course_ct)[0],
         }
 
         interactive_perms = {
@@ -65,7 +78,6 @@ class Command(BaseCommand):
                                                                      content_type=interactive_cts[0])[0],
         }
 
-        # Назначение разрешений группам
         admin_group.permissions.set(list(perms.values()) + list(interactive_perms.values()))
         organizer_group.permissions.set([
             perms['can_create_meeting'],
@@ -90,6 +102,10 @@ class Command(BaseCommand):
         ])
         analyst_group.permissions.set([
             perms['can_view_analytics'],
+        ])
+        leader_group.permissions.set([
+            perms['can_manage_department'],
+            perms['can_view_department_courses'],
         ])
 
         self.stdout.write(self.style.SUCCESS('Groups and permissions created successfully'))

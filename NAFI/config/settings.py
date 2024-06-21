@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'courses',
     'notifications',
     'documents',
+    'departments',
     
     # allauth apps
     'allauth',

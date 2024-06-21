@@ -1,13 +1,14 @@
 from datetime import datetime
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
 from allauth.account.views import SignupView
 from meetings.models import Meeting
-from .forms import CustomSignupForm, CustomLoginForm
+from .forms import CustomSignupForm, CustomLoginForm, UserProfileForm
 from courses.models import Module, UserProgress, UserCourse
 from datetime import datetime, date
+from .models import UserProfile
 
 class CustomSignupView(SignupView):
     form_class = CustomSignupForm
@@ -92,3 +93,16 @@ def profile(request):
         'today_weekday': today.strftime("%A")
     }
     return render(request, 'users/profile.html', context)
+
+
+@login_required
+def edit_profile(request):
+    user_profile, created = UserProfile.objects.get_or_create(user=request.user)
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+        if form.is_valid():
+            form.save()
+            return redirect('users:profile')
+    else:
+        form = UserProfileForm(instance=user_profile)
+    return render(request, 'users/edit_profile.html', {'form': form})

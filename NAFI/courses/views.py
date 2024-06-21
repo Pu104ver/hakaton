@@ -3,7 +3,6 @@ from .models import Course, Module, Lesson, UserCourse, UserProgress
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
-import requests
 
 def course_list(request):
     courses = Course.objects.all()
@@ -29,19 +28,15 @@ def enroll_course(request, course_id):
 def lesson_detail(request, lesson_id):
     lesson = get_object_or_404(Lesson, id=lesson_id)
     user_progress = None
+    
     if request.user.is_authenticated:
         user_progress = UserProgress.objects.filter(lesson=lesson, user=request.user).first()
     
-    # Логика для определения предыдущего и следующего урока
     previous_lesson = None
     next_lesson = None
 
     all_modules = list(lesson.module.course.modules.all())
-    current_module_index = all_modules.index(lesson.module)
-    all_lessons_in_course = []
-    for module in all_modules:
-        all_lessons_in_course.extend(module.lessons.all())
-
+    all_lessons_in_course = [lesson for module in all_modules for lesson in module.lessons.all()]
     current_lesson_index = all_lessons_in_course.index(lesson)
 
     if current_lesson_index > 0:
@@ -56,8 +51,6 @@ def lesson_detail(request, lesson_id):
         'next_lesson': next_lesson
     })
 
-
-
 @login_required
 def user_courses(request):
     user_courses = UserCourse.objects.filter(user=request.user)
@@ -70,6 +63,7 @@ def mark_lesson_completed(request, lesson_id):
     
     if not user_progress.completed:
         user_progress.completed = True
+        user_progress.completed_at = timezone.now()
         user_progress.save()
 
         course = lesson.module.course
@@ -110,6 +104,7 @@ def unmark_lesson_completed(request, lesson_id):
         user_progress = UserProgress.objects.get(user=request.user, lesson=lesson)
         if user_progress.completed:
             user_progress.completed = False
+            user_progress.completed_at = None
             user_progress.save()
             
             course = lesson.module.course
