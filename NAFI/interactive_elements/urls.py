@@ -1,20 +1,66 @@
 from django.urls import path
-from django.views.generic import TemplateView
-from . import views
+from .views import (
+    InteractiveListView,
+    TextQuestionCreateView, TextQuestionUpdateView, TextQuestionDetailView, TextAnswerCreateView,
+    NumberQuestionCreateView, NumberQuestionUpdateView, NumberQuestionDetailView, NumberAnswerCreateView,
+    AudienceQACreateView,
+    NetworkingCreateView,
+    StarVotingQuestionCreateView, StarVotingQuestionUpdateView, StarVotingQuestionDetailView, StarVoteCreateView,
+    SingleChoiceQuestionCreateView, SingleChoiceQuestionUpdateView, SingleChoiceQuestionDetailView, SingleChoiceAnswerCreateView,
+    MultipleChoiceQuestionCreateView, MultipleChoiceQuestionUpdateView, MultipleChoiceQuestionDetailView, MultipleChoiceAnswerCreateView,
+    SurveyCreateAndAddQuestionView, SurveyQuestionUpdateView, SurveyQuestionDetailView, SurveyAnswerCreateView,
+    QuizCreateView, QuizUpdateView, QuizDetailView, QuizAnswerCreateView
+)
 
 urlpatterns = [
-    path('create/<int:meeting_id>/', views.create_interactive, name='create_interactive'),
-    path('<int:interactive_id>/', views.interactive_detail, name='interactive_detail'),
-    path('<int:interactive_id>/add_text_question/', views.add_text_question, name='add_text_question'),
-    path('<int:interactive_id>/add_number_question/', views.add_number_question, name='add_number_question'),
-    path('<int:interactive_id>/add_audience_qa/', views.add_audience_qa, name='add_audience_qa'),
-    path('<int:interactive_id>/add_networking/', views.add_networking, name='add_networking'),
-    path('<int:interactive_id>/add_star_voting/', views.add_star_voting, name='add_star_voting'),
-    path('<int:interactive_id>/add_single_choice/', views.add_single_choice, name='add_single_choice'),
-    path('<int:interactive_id>/add_multiple_choice/', views.add_multiple_choice, name='add_multiple_choice'),
-    path('<int:interactive_id>/add_survey/', views.add_survey, name='add_survey'),
-    path('<int:interactive_id>/add_quiz/', views.add_quiz, name='add_quiz'),
-    path('<int:interactive_id>/participate/', views.participate_interactive, name='participate_interactive'),
-    path('<int:interactive_id>/results/', views.interactive_result, name='interactive_result'),
-    path('error/', TemplateView.as_view(template_name='interactive_elements/error_page.html'), name='error_page'),
+    # Interactive URLs
+    path('interactives/', InteractiveListView.as_view(), name='interactive_list'),
+
+    # Text Question URLs
+    path('interactives/text-question/create/', TextQuestionCreateView.as_view(), name='text_question_create'),
+    # path('interactives/text-question/<int:pk>/update/', TextQuestionUpdateView.as_view(), name='text_question_update'),
+    # path('interactives/text-answer/<int:pk>/', TextQuestionDetailView.as_view(), name='text_answer_detail'),
+    # path('interactives/text-answer/create/', TextAnswerCreateView.as_view(), name='text_answer_create'),
+
+    # Number Question URLs
+    path('interactives/number-question/create/', NumberQuestionCreateView.as_view(), name='number_question_create'),
+    # path('interactives/number-question/<int:pk>/update/', NumberQuestionUpdateView.as_view(), name='number_question_update'),
+    # path('interactives/number-answer/<int:pk>/', NumberQuestionDetailView.as_view(), name='number_answer_detail'),
+    # path('interactives/number-answer/create/', NumberAnswerCreateView.as_view(), name='number_answer_create'),
+
+    # Audience QA URLs
+    path('audience-qa/create/', AudienceQACreateView.as_view(), name='audience_qa_create'),
+
+    # Networking URLs
+    path('networking/create/', NetworkingCreateView.as_view(), name='networking_create'),
+
+    # Star Voting URLs
+    path('interactives/star-voting-question/create/', StarVotingQuestionCreateView.as_view(), name='star_voting_question_create'),
+    # path('interactives/star-voting-question/<int:pk>/update/', StarVotingQuestionUpdateView.as_view(), name='star_voting_question_update'),
+    # path('interactives/star-voting-question/<int:pk>/', StarVotingQuestionDetailView.as_view(), name='star_voting_question_detail'),
+    # path('interactives/star-vote/create/', StarVoteCreateView.as_view(), name='star_vote_create'),
+
+    # Single Choice URLs
+    path('interactives/single-choice-question/create/', SingleChoiceQuestionCreateView.as_view(), name='single_choice_question_create'),
+    # path('interactives/single-choice-question/<int:pk>/update/', SingleChoiceQuestionUpdateView.as_view(), name='single_choice_question_update'),
+    # path('interactives/single-choice-question/<int:pk>/', SingleChoiceQuestionDetailView.as_view(), name='single_choice_question_detail'),
+    # path('interactives/single-choice-answer/create/', SingleChoiceAnswerCreateView.as_view(), name='single_choice_answer_create'),
+
+    # Multiple Choice URLs
+    path('interactives/multiple-choice-question/create/', MultipleChoiceQuestionCreateView.as_view(), name='multiple_choice_question_create'),
+    # path('interactives/multiple-choice-question/<int:pk>/update/', MultipleChoiceQuestionUpdateView.as_view(), name='multiple_choice_question_update'),
+    # path('interactives/multiple-choice-question/<int:pk>/', MultipleChoiceQuestionDetailView.as_view(), name='multiple_choice_question_detail'),
+    # path('interactives/multiple-choice-answer/create/', MultipleChoiceAnswerCreateView.as_view(), name='multiple_choice_answer_create'),
+
+    # Survey URLs
+    path('interactives/survey-question/create/', SurveyCreateAndAddQuestionView.as_view(), name='survey_create'),
+    # path('interactives/survey-question/<int:pk>/update/', SurveyQuestionUpdateView.as_view(), name='survey_question_update'),
+    # path('interactives/survey-question/<int:pk>/', SurveyQuestionDetailView.as_view(), name='survey_question_detail'),
+    # path('interactives/survey-answer/create/', SurveyAnswerCreateView.as_view(), name='survey_answer_create'),
+
+    # Quiz URLs
+    path('interactives/quiz/create/', QuizCreateView.as_view(), name='quiz_create'),
+    # path('interactives/quiz/<int:pk>/update/', QuizUpdateView.as_view(), name='quiz_update'),
+    # path('interactives/quiz/<int:pk>/', QuizDetailView.as_view(), name='quiz_detail'),
+    # path('interactives/quiz-answer/create/', QuizAnswerCreateView.as_view(), name='quiz_answer_create'),
 ]

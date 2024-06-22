@@ -1,197 +1,335 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, UpdateView, DetailView, ListView, View
 from .models import (
-    Interactive, TextQuestion, NumberQuestion, AudienceQA, Networking,
-    StarVoting, SingleChoice, MultipleChoice, Survey, Quiz, InteractiveResponse
+    Interactive, TextQuestion, TextAnswer, NumberQuestion, NumberAnswer,
+    AudienceQA, Networking, StarVotingQuestion, StarVote, SingleChoiceQuestion,
+    SingleChoiceAnswer, MultipleChoiceQuestion, MultipleChoiceAnswer, Survey,
+    SurveyQuestion, SurveyAnswer, Quiz, QuizAnswer
 )
 from .forms import (
-    InteractiveForm, TextQuestionForm, NumberQuestionForm, AudienceQAForm, NetworkingForm,
-    StarVotingForm, SingleChoiceForm, MultipleChoiceForm, SurveyForm, QuizForm, InteractiveResponseForm
+    InteractiveForm, TextQuestionForm, TextAnswerForm, NumberQuestionForm,
+    NumberAnswerForm, AudienceQAForm, NetworkingForm, StarVotingQuestionForm,
+    StarVoteForm, SingleChoiceQuestionForm, SingleChoiceAnswerForm,
+    MultipleChoiceQuestionForm, MultipleChoiceAnswerForm, SurveyForm,
+    SurveyQuestionForm, SurveyAnswerForm, QuizForm, QuizAnswerForm
 )
-from config.decorators.user_passes_test_custom import user_passes_test_custom
-from meetings.models import Meeting
 
-def is_organizer(user):
-    return user.groups.filter(name='Organizer').exists()
+# Interactive Views
+class InteractiveCreateView(CreateView):
+    model = Interactive
+    form_class = InteractiveForm
+    template_name = 'interactive_elements/interactive_create.html'
+    success_url = reverse_lazy('interactive_list')
 
-@user_passes_test_custom(is_organizer)
-@login_required
-def create_interactive(request, meeting_id):
-    meeting = get_object_or_404(Meeting, id=meeting_id)
+class InteractiveUpdateView(UpdateView):
+    model = Interactive
+    form_class = InteractiveForm
+    template_name = 'interactive_elements/interactive_update.html'
+    success_url = reverse_lazy('interactive_list')
+
+class InteractiveDetailView(DetailView):
+    model = Interactive
+    template_name = 'interactive_elements/interactive_detail.html'
+
+class InteractiveListView(ListView):
+    model = Interactive
+    template_name = 'interactive_elements/interactive_list.html'
+    context_object_name = 'interactives'
+
+# Text Question Views
+class TextQuestionCreateView(CreateView):
+    model = TextQuestion
+    form_class = TextQuestionForm
+    template_name = 'interactive_elements/text_question_create.html'
+    success_url = reverse_lazy('interactive_list')
+
+    def form_valid(self, form):
+        # Создаем интерактив
+        interactive = Interactive.objects.create(
+            meeting=form.cleaned_data['meeting'],
+            title=form.cleaned_data['title'],
+            type='text_question',
+            description=form.cleaned_data['description']
+        )
+        form.instance.interactive = interactive
+        return super().form_valid(form)
+
+class TextQuestionUpdateView(UpdateView):
+    model = TextQuestion
+    form_class = TextQuestionForm
+    template_name = 'interactive_elements/text_question_update.html'
+    success_url = reverse_lazy('interactive_list')
+
+class TextQuestionDetailView(DetailView):
+    model = TextQuestion
+    template_name = 'interactive_elements/text_question_detail.html'
+
+class TextAnswerCreateView(CreateView):
+    model = TextAnswer
+    form_class = TextAnswerForm
+    template_name = 'interactive_elements/text_question_answer.html'
+    success_url = reverse_lazy('interactive_list')
+
+# Number Question Views
+class NumberQuestionCreateView(CreateView):
+    model = NumberQuestion
+    form_class = NumberQuestionForm
+    template_name = 'interactive_elements/number_question_create.html'
+    success_url = reverse_lazy('interactive_list')
+
+    def form_valid(self, form):
+        # Создаем интерактив
+        interactive = Interactive.objects.create(
+            meeting=form.cleaned_data['meeting'],
+            title=form.cleaned_data['title'],
+            type='number_question',
+            description=form.cleaned_data['description']
+        )
+        form.instance.interactive = interactive
+        return super().form_valid(form)
+
+class NumberQuestionUpdateView(UpdateView):
+    model = NumberQuestion
+    form_class = NumberQuestionForm
+    template_name = 'interactive_elements/number_question_update.html'
+    success_url = reverse_lazy('interactive_list')
+
+class NumberQuestionDetailView(DetailView):
+    model = NumberQuestion
+    template_name = 'interactive_elements/number_question_detail.html'
+
+class NumberAnswerCreateView(CreateView):
+    model = NumberAnswer
+    form_class = NumberAnswerForm
+    template_name = 'interactive_elements/number_question_answer.html'
+    success_url = reverse_lazy('interactive_list')
+
+# Audience QA Views
+class AudienceQACreateView(CreateView):
+    model = AudienceQA
+    form_class = AudienceQAForm
+    template_name = 'interactive_elements/audience_qa_form.html'
+    success_url = reverse_lazy('interactive_list')
+
+# Networking Views
+class NetworkingCreateView(CreateView):
+    model = Networking
+    form_class = NetworkingForm
+    template_name = 'interactive_elements/networking_form.html'
+    success_url = reverse_lazy('interactive_list')
+
+# Star Voting Views
+class StarVotingQuestionCreateView(CreateView):
+    model = StarVotingQuestion
+    form_class = StarVotingQuestionForm
+    template_name = 'interactive_elements/star_voting_question_create.html'
+    success_url = reverse_lazy('interactive_list')
+
+    def form_valid(self, form):
+        # Создаем интерактив
+        interactive = Interactive.objects.create(
+            meeting=form.cleaned_data['meeting'],
+            title=form.cleaned_data['title'],
+            type='star_voting',
+            description=form.cleaned_data['description']
+        )
+        form.instance.interactive = interactive
+        return super().form_valid(form)
+
+class StarVotingQuestionUpdateView(UpdateView):
+    model = StarVotingQuestion
+    form_class = StarVotingQuestionForm
+    template_name = 'interactive_elements/star_voting_question_update.html'
+    success_url = reverse_lazy('interactive_list')
+
+class StarVotingQuestionDetailView(DetailView):
+    model = StarVotingQuestion
+    template_name = 'interactive_elements/star_voting_question_detail.html'
+
+class StarVoteCreateView(CreateView):
+    model = StarVote
+    form_class = StarVoteForm
+    template_name = 'interactive_elements/star_vote_form.html'
+    success_url = reverse_lazy('interactive_list')
+
+# Single Choice Views
+class SingleChoiceQuestionCreateView(CreateView):
+    model = SingleChoiceQuestion
+    form_class = SingleChoiceQuestionForm
+    template_name = 'interactive_elements/single_choice_question_create.html'
+    success_url = reverse_lazy('interactive_list')
+
+    def form_valid(self, form):
+        interactive = Interactive.objects.create(
+            meeting=form.cleaned_data['meeting'],
+            title=form.cleaned_data['title'],
+            type='single_choice',
+            description=form.cleaned_data['description']
+        )
+        form.instance.interactive = interactive
+        options = self.request.POST.getlist('options')
+        form.instance.options = options
+
+        return super().form_valid(form)
+
+class SingleChoiceQuestionUpdateView(UpdateView):
+    model = SingleChoiceQuestion
+    form_class = SingleChoiceQuestionForm
+    template_name = 'interactive_elements/single_choice_question_update.html'
+    success_url = reverse_lazy('interactive_list')
+
+class SingleChoiceQuestionDetailView(DetailView):
+    model = SingleChoiceQuestion
+    template_name = 'interactive_elements/single_choice_question_detail.html'
     
-    if request.method == 'POST':
-        interactive_form = InteractiveForm(request.POST)
-        if interactive_form.is_valid():
-            interactive = interactive_form.save(commit=False)
-            interactive.meeting = meeting
-            interactive.creator = request.user
-            interactive.save()
-            return redirect('interactive_detail', interactive.id)
-    else:
-        interactive_form = InteractiveForm()
-    
-    return render(request, 'interactive_elements/create_interactive.html', {'interactive_form': interactive_form})
+class SingleChoiceAnswerCreateView(CreateView):
+    model = SingleChoiceAnswer
+    form_class = SingleChoiceAnswerForm
+    template_name = 'interactive_elements/single_choice_answer_form.html'
+    success_url = reverse_lazy('interactive_list')
 
-@user_passes_test_custom(is_organizer)
-@login_required
-def add_text_question(request, interactive_id):
-    interactive = get_object_or_404(Interactive, id=interactive_id)
-    if request.method == 'POST':
-        form = TextQuestionForm(request.POST)
-        if form.is_valid():
-            question = form.save(commit=False)
-            question.interactive = interactive
-            question.save()
-            return redirect('interactive_detail', interactive.id)
-    else:
-        form = TextQuestionForm()
-    return render(request, 'interactive_elements/add_text_question.html', {'form': form})
+# Multiple Choice Views
+class MultipleChoiceQuestionCreateView(CreateView):
+    model = MultipleChoiceQuestion
+    form_class = MultipleChoiceQuestionForm
+    template_name = 'interactive_elements/multiple_choice_question_create.html'
+    success_url = reverse_lazy('interactive_list')
 
-@user_passes_test_custom(is_organizer)
-@login_required
-def add_number_question(request, interactive_id):
-    interactive = get_object_or_404(Interactive, id=interactive_id)
-    if request.method == 'POST':
-        form = NumberQuestionForm(request.POST)
-        if form.is_valid():
-            question = form.save(commit=False)
-            question.interactive = interactive
-            question.save()
-            return redirect('interactive_detail', interactive.id)
-    else:
-        form = NumberQuestionForm()
-    return render(request, 'interactive_elements/add_number_question.html', {'form': form})
+    def form_valid(self, form):
+        interactive = Interactive.objects.create(
+            meeting=form.cleaned_data['meeting'],
+            title=form.cleaned_data['title'],
+            type='multiple_choice',
+            description=form.cleaned_data['description']
+        )
+        form.instance.interactive = interactive
+        options = self.request.POST.getlist('options')
+        form.instance.options = options
 
-@user_passes_test_custom(is_organizer)
-@login_required
-def add_audience_qa(request, interactive_id):
-    interactive = get_object_or_404(Interactive, id=interactive_id)
-    if request.method == 'POST':
-        form = AudienceQAForm(request.POST)
-        if form.is_valid():
-            question = form.save(commit=False)
-            question.interactive = interactive
-            question.save()
-            return redirect('interactive_detail', interactive.id)
-    else:
-        form = AudienceQAForm()
-    return render(request, 'interactive_elements/add_audience_qa.html', {'form': form})
+        return super().form_valid(form)
 
-@user_passes_test_custom(is_organizer)
-@login_required
-def add_networking(request, interactive_id):
-    interactive = get_object_or_404(Interactive, id=interactive_id)
-    if request.method == 'POST':
-        form = NetworkingForm(request.POST)
-        if form.is_valid():
-            question = form.save(commit=False)
-            question.interactive = interactive
-            question.save()
-            return redirect('interactive_detail', interactive.id)
-    else:
-        form = NetworkingForm()
-    return render(request, 'interactive_elements/add_networking.html', {'form': form})
+class MultipleChoiceQuestionUpdateView(UpdateView):
+    model = MultipleChoiceQuestion
+    form_class = MultipleChoiceQuestionForm
+    template_name = 'interactive_elements/multiple_choice_question_update.html'
+    success_url = reverse_lazy('interactive_list')
 
-@user_passes_test_custom(is_organizer)
-@login_required
-def add_star_voting(request, interactive_id):
-    interactive = get_object_or_404(Interactive, id=interactive_id)
-    if request.method == 'POST':
-        form = StarVotingForm(request.POST)
-        if form.is_valid():
-            question = form.save(commit=False)
-            question.interactive = interactive
-            question.save()
-            return redirect('interactive_detail', interactive.id)
-    else:
-        form = StarVotingForm()
-    return render(request, 'interactive_elements/add_star_voting.html', {'form': form})
+class MultipleChoiceQuestionDetailView(DetailView):
+    model = MultipleChoiceQuestion
+    template_name = 'interactive_elements/multiple_choice_question_detail.html'
 
-@user_passes_test_custom(is_organizer)
-@login_required
-def add_single_choice(request, interactive_id):
-    interactive = get_object_or_404(Interactive, id=interactive_id)
-    if request.method == 'POST':
-        form = SingleChoiceForm(request.POST)
-        if form.is_valid():
-            question = form.save(commit=False)
-            question.interactive = interactive
-            question.save()
-            return redirect('interactive_detail', interactive.id)
-    else:
-        form = SingleChoiceForm()
-    return render(request, 'interactive_elements/add_single_choice.html', {'form': form})
+class MultipleChoiceAnswerCreateView(CreateView):
+    model = MultipleChoiceAnswer
+    form_class = MultipleChoiceAnswerForm
+    template_name = 'interactive_elements/multiple_choice_answer_form.html'
+    success_url = reverse_lazy('interactive_list')
 
-@user_passes_test_custom(is_organizer)
-@login_required
-def add_multiple_choice(request, interactive_id):
-    interactive = get_object_or_404(Interactive, id=interactive_id)
-    if request.method == 'POST':
-        form = MultipleChoiceForm(request.POST)
-        if form.is_valid():
-            question = form.save(commit=False)
-            question.interactive = interactive
-            question.save()
-            return redirect('interactive_detail', interactive.id)
-    else:
-        form = MultipleChoiceForm()
-    return render(request, 'interactive_elements/add_multiple_choice.html', {'form': form})
+# Survey Views
+class SurveyCreateAndAddQuestionView(View):
+    template_name = 'interactive_elements/survey_create_and_add_question.html'
 
-@user_passes_test_custom(is_organizer)
-@login_required
-def add_survey(request, interactive_id):
-    interactive = get_object_or_404(Interactive, id=interactive_id)
-    if request.method == 'POST':
+    def get(self, request, *args, **kwargs):
+        form = SurveyForm()
+        question_form = SurveyQuestionForm()
+        questions = request.session.get('survey_questions', [])
+        return render(request, self.template_name, {
+            'form': form,
+            'question_form': question_form,
+            'questions': questions
+        })
+
+    def post(self, request, *args, **kwargs):
+        if 'add_question' in request.POST:
+            return self.add_question(request)
+        elif 'create_survey' in request.POST:
+            return self.create_survey(request)
+        else:
+            return self.get(request)
+
+    def add_question(self, request):
+        question_form = SurveyQuestionForm(request.POST)
+        if question_form.is_valid():
+            question_text = question_form.cleaned_data['question_text']
+            questions = request.session.get('survey_questions', [])
+            questions.append(question_text)
+            request.session['survey_questions'] = questions
+        return redirect('survey_create')
+
+    def create_survey(self, request):
         form = SurveyForm(request.POST)
         if form.is_valid():
-            question = form.save(commit=False)
-            question.interactive = interactive
-            question.save()
-            return redirect('interactive_detail', interactive.id)
-    else:
-        form = SurveyForm()
-    return render(request, 'interactive_elements/add_survey.html', {'form': form})
+            survey = form.save(commit=False)
+            survey.interactive = Interactive.objects.create(
+                meeting=form.cleaned_data['meeting'],
+                title=form.cleaned_data['title'],
+                type='survey',
+                description=form.cleaned_data['description']
+            )
+            survey.save()
+            questions = request.session.get('survey_questions', [])
+            for question_text in questions:
+                SurveyQuestion.objects.create(
+                    survey=survey,
+                    question_text=question_text
+                )
+            request.session['survey_questions'] = []
+            return redirect(reverse_lazy('interactive_list'))
+        else:
+            question_form = SurveyQuestionForm()
+            questions = request.session.get('survey_questions', [])
+            return render(request, self.template_name, {
+                'form': form,
+                'question_form': question_form,
+                'questions': questions
+            })
 
-@user_passes_test_custom(is_organizer)
-@login_required
-def add_quiz(request, interactive_id):
-    interactive = get_object_or_404(Interactive, id=interactive_id)
-    if request.method == 'POST':
-        form = QuizForm(request.POST)
-        if form.is_valid():
-            question = form.save(commit=False)
-            question.interactive = interactive
-            question.save()
-            return redirect('interactive_detail', interactive.id)
-    else:
-        form = QuizForm()
-    return render(request, 'interactive_elements/add_quiz.html', {'form': form})
+class SurveyQuestionUpdateView(UpdateView):
+    model = SurveyQuestion
+    form_class = SurveyQuestionForm
+    template_name = 'interactive_elements/survey_question_update.html'
+    success_url = reverse_lazy('interactive_list')
 
-@user_passes_test_custom(is_organizer)
-@login_required
-def interactive_detail(request, interactive_id):
-    interactive = get_object_or_404(Interactive, id=interactive_id)
-    return render(request, 'interactive_elements/interactive_detail.html', {'interactive': interactive})
+class SurveyQuestionDetailView(DetailView):
+    model = SurveyQuestion
+    template_name = 'interactive_elements/survey_question_detail.html'
 
-@user_passes_test_custom(is_organizer)
-@login_required
-def participate_interactive(request, interactive_id):
-    interactive = get_object_or_404(Interactive, id=interactive_id)
-    if request.method == 'POST':
-        response_form = InteractiveResponseForm(request.POST)
-        if response_form.is_valid():
-            response = response_form.save(commit=False)
-            response.interactive = interactive
-            response.participant = request.user
-            response.save()
-            return redirect('interactive_result', interactive.id)
-    else:
-        response_form = InteractiveResponseForm()
-    return render(request, 'interactive_elements/participate_interactive.html', {'interactive': interactive, 'response_form': response_form})
+class SurveyAnswerCreateView(CreateView):
+    model = SurveyAnswer
+    form_class = SurveyAnswerForm
+    template_name = 'interactive_elements/survey_answer_form.html'
+    success_url = reverse_lazy('interactive_list')
 
-@user_passes_test_custom(is_organizer)
-@login_required
-def interactive_result(request, interactive_id):
-    interactive = get_object_or_404(Interactive, id=interactive_id)
-    responses = InteractiveResponse.objects.filter(interactive=interactive)
-    return render(request, 'interactive_elements/interactive_result.html', {'interactive': interactive, 'responses': responses})
+# Quiz Views
+class QuizCreateView(CreateView):
+    model = Quiz
+    form_class = QuizForm
+    template_name = 'interactive_elements/quiz_create.html'
+    success_url = reverse_lazy('interactive_list')
+
+    def form_valid(self, form):
+        quiz = form.save(commit=False)
+        quiz.interactive = Interactive.objects.create(
+            meeting=form.cleaned_data['meeting'],
+            title=form.cleaned_data['title'],
+            type='quiz',
+            description=form.cleaned_data['description']
+        )
+        quiz.save()
+        return super().form_valid(form)
+
+class QuizUpdateView(UpdateView):
+    model = Quiz
+    form_class = QuizForm
+    template_name = 'interactive_elements/quiz_form.html'
+    success_url = reverse_lazy('interactive_list')
+
+class QuizDetailView(DetailView):
+    model = Quiz
+    template_name = 'interactive_elements/quiz_detail.html'
+
+class QuizAnswerCreateView(CreateView):
+    model = QuizAnswer
+    form_class = QuizAnswerForm
+    template_name = 'interactive_elements/quiz_answer_form.html'
+    success_url = reverse_lazy('interactive_list')

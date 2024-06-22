@@ -50,7 +50,7 @@ def lesson_detail(request, lesson_id):
         'previous_lesson': previous_lesson,
         'next_lesson': next_lesson
     })
-
+    
 @login_required
 def user_courses(request):
     user_courses = UserCourse.objects.filter(user=request.user)

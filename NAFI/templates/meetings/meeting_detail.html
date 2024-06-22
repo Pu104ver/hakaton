@@ -10,6 +10,6 @@
 <a href="{% url 'user_meetings' %}">Back to meetings</a>
 {% if meeting.host == request.user %}
     <a href="{% url 'edit_meeting' meeting_id=meeting.id %}">Изменить</a>
-    <a href="{% url 'create_interactive' meeting_id=meeting.id %}">Добавить Интерактив</a>
+    <a href="{% url 'interactive_list' %}">Добавить Интерактив</a>
 {% endif %}
 {% endblock %}

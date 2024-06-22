@@ -107,7 +107,6 @@ def statistics(request):
 
         for course in courses:
             modules = course.modules.all()
-            # print for every UserProgress they'r completed at attribute
             print(UserProgress.objects.filter(lesson__module__in=modules).values('completed_at').distinct().order_by('completed_at'))
             completed_lessons = UserProgress.objects.filter(
                 lesson__module__in=modules,
@@ -116,7 +115,6 @@ def statistics(request):
                 completed_at__range=(start_date, end_date)
             ).count()
             department_completed_lessons += completed_lessons
-            # print(f"Department: {department}, Course: {course}, Completed Lessons: {completed_lessons}")
         total_completed_lessons += department_completed_lessons
         
         department_stats.append({
@@ -127,8 +125,6 @@ def statistics(request):
             'department_completed_lessons': department_completed_lessons
         })
 
-    print(f'{start_date:%Y-%m-%d %H:%M:%S} - {end_date:%Y-%m-%d %H:%M:%S}')
-    
     context = {
         'departments': department_stats,
         'total_completed_lessons': total_completed_lessons,
