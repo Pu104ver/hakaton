@@ -19,8 +19,8 @@ urlpatterns = [
     # Text Question URLs
     path('interactives/text-question/create/', TextQuestionCreateView.as_view(), name='text_question_create'),
     path('interactives/text-question/<int:pk>/update/', TextQuestionUpdateView.as_view(), name='text_question_update'),
-    # path('interactives/text-answer/<int:pk>/', TextQuestionDetailView.as_view(), name='text_answer_detail'),
-    # path('interactives/text-answer/create/', TextAnswerCreateView.as_view(), name='text_answer_create'),
+    path('interactives/text-answer/<int:pk>/', TextQuestionDetailView.as_view(), name='text_answer_detail'),
+    path('interactives/text-answer/create/', TextAnswerCreateView.as_view(), name='text_answer_create'),
 
     # Number Question URLs
     path('interactives/number-question/create/', NumberQuestionCreateView.as_view(), name='number_question_create'),
