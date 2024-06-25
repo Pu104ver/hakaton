@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Text Question Details</h2>
+<p>Question: {{ text_question.question_text }}</p>
+<p>Max Length: {{ text_question.max_length }}</p>
+<p>Created at: {{ text_question.created_at }}</p>
+
+<h3>Answers</h3>
+<ul>
+    {% for answer in text_question.answers.all %}
+    <li>{{ answer.user.username }}: {{ answer.answer_text }} ({{ answer.created_at }})</li>
+    {% empty %}
+    <li>No answers yet.</li>
+    {% endfor %}
+</ul>
+
+<p><a href="{{ meeting.url }}">Ссылка на встречу</a></p>
+{% endblock %}
