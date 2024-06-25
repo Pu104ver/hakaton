@@ -4,6 +4,15 @@ from django.conf import settings
 from meetings.models import Meeting
 
 
+from django.dispatch import receiver
+from django.db.models.signals import m2m_changed
+from django.contrib.auth.models import Group
+from django.contrib.auth import get_user_model
+from notifications.models import Notification
+
+User = get_user_model()
+
+
 class Interactive(models.Model):
     INTERACTIVE_TYPES = [
         ('text_question', 'Открытый вопрос (текст)'),
@@ -24,6 +33,41 @@ class Interactive(models.Model):
     is_repeatable = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField(blank=True, null=True)
+    participants = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='interactives_participants')
+    host = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    url = models.URLField()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        participant_group, created = Group.objects.get_or_create(name='Participant')
+        for participant in self.participants.all():
+            participant.groups.add(participant_group)
+
+    def __str__(self):
+        return self.title
+
+
+@receiver(m2m_changed, sender=Meeting.participants.through)
+def participants_changed(sender, instance, action, pk_set, **kwargs):
+    if action == "post_add":
+        for user_id in pk_set:
+            user = User.objects.get(pk=user_id)
+            Notification.objects.create(
+                user=user,
+                message=f'You have been added to the interactives "{instance.title}" by {instance.host.username}.',
+                link=instance.url
+            )
+
+    elif action == "post_remove":
+        for user_id in pk_set:
+            user = User.objects.get(pk=user_id)
+            Notification.objects.create(
+                user=user,
+                message=f'You have been removed from the interactives "{instance.title}" by {instance.host.username}.'
+            )
 
 
 # Открытый вопрос (текст)
@@ -150,3 +194,5 @@ class QuizAnswer(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     answers = models.JSONField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+
